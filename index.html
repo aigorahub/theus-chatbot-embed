@@ -5,44 +5,42 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>React Chatbot</title>
 
-    <!-- 1. Updated CSS -->
+    <!-- 1. Paste your CSS code between the <style> tags -->
     <style>
-      /* Import Google Fonts */
+      /* Import Google Fonts - Add this at the VERY TOP */
       @import url('https://fonts.googleapis.com/css2?family=Cormorant+SC:wght@700&family=Roboto:wght@400;700&display=swap');
 
-      /* Basic styles for iframe context */
+      /* Ensure body takes full height for potential centering */
       html, body {
+        height: 100%;
         margin: 0;
         padding: 0;
-        width: 100%;
-        height: 100%;
-        background-color: transparent; /* Allow Wix background to show through */
-        font-family: 'Roboto', sans-serif; /* Optional: Set base font */
-        font-size: 16px; /* Optional: Set base font size */
-        overflow: hidden; /* Prevent scrollbars on body/html */
+        /* Optional: Add background/centering if needed for standalone testing */
+         display: flex; /* Center the chatbot for testing */
+         justify-content: center;
+         align-items: center;
+         background-color: #eaeaea; /* Use background from your CSS */
+         font-family: 'Roboto', sans-serif; /* Apply default font */
+         font-size: 16px; /* Apply default font size */
       }
-
-      /* Ensure root fills the body */
+      /* Ensure root takes available space if needed */
       #root {
-         width: 100%;
-         height: 100%;
-         display: flex; /* Use flex to easily manage the chatbot container */
+         /* Let the React component define its own size via .chatbot-container */
+         /* No specific width/height needed here if the component handles it */
       }
 
-      /* --- Chatbot Component CSS --- */
+      /* --- Your Original CSS --- */
       .chatbot-container {
-        width: 100%; /* Fill the #root div */
-        height: 100%; /* Fill the #root div */
-        /* min-height: 300px; /* Keep minimum height */
+        width: 360px;
+        max-height: calc(100vh - 40px); /* Adjust based on body centering */
+        min-height: 300px;
         display: flex;
         flex-direction: column;
-        background-color: #F3F3F3; /* Chatbot background */
-        overflow: hidden; /* Container handles internal overflow */
-        /* Remove styles better handled by Wix element container */
-        border-radius: 0;
-        box-shadow: none;
-        border: none;
-         box-sizing: border-box; /* Ensure padding/border included in 100% */
+        background-color: #F3F3F3; /* Cream container background */
+        border-radius: 12px;
+        overflow: hidden;
+        box-shadow: 0 4px 12px rgba(65, 65, 65, 0.2);
+        border: 1px solid #414141; /* Dark grey outer border */
       }
 
       .chatbot-header {
@@ -52,8 +50,8 @@
         display: flex;
         align-items: center;
         justify-content: flex-end;
-        flex-shrink: 0; /* Prevent header from shrinking */
-        border-bottom: 1px solid #414141;
+        flex-shrink: 0;
+        border-bottom: 1px solid #414141; /* CHANGED: Dark grey bottom border */
       }
 
       .chatbot-header img {
@@ -62,13 +60,13 @@
       }
 
       .chatbot-messages {
-        flex: 1; /* Allow messages area to grow */
+        flex: 1;
         padding: 16px;
-        overflow-y: auto; /* Scroll messages */
+        overflow-y: auto;
         display: flex;
         flex-direction: column;
         gap: 10px;
-        background-color: #FFFFFF;
+        background-color: #FFFFFF; /* White messages background for contrast */
         font-size: 15px;
       }
 
@@ -99,21 +97,14 @@
       .chatbot-message.typing-indicator {
         color: #555;
         font-style: italic;
-         /* Make typing indicator consistent with bot message */
-         background-color: #86C490;
-         color: #414141;
-         align-self: flex-start;
-         border-bottom-left-radius: 4px;
-         padding: 10px 14px; /* Add padding like other messages */
-         border-radius: 16px; /* Add radius like other messages */
       }
 
       .chatbot-input {
         display: flex;
         padding: 10px;
-        border-top: 1px solid #414141;
-        background-color: #f9f9f9;
-        flex-shrink: 0; /* Prevent input area from shrinking */
+        border-top: 1px solid #414141; /* CHANGED: Dark grey top border */
+        background-color: #f9f9f9; /* Light grey input area background */
+        flex-shrink: 0;
       }
 
       .chatbot-input textarea {
@@ -125,9 +116,9 @@
         line-height: 1.4;
         outline: none;
         resize: none;
-        overflow-y: hidden; /* Needed for auto-resize */
-        min-height: 22px; /* Initial height */
-        max-height: 120px; /* Limit expansion */
+        overflow-y: hidden;
+        min-height: 22px;
+        max-height: 120px;
         box-sizing: border-box;
         font-family: 'Roboto', sans-serif;
         background-color: #FFFFFF;
@@ -152,7 +143,6 @@
         justify-content: center;
         font-family: 'Roboto', sans-serif;
         font-size: 14px;
-        height: 40px; /* Match textarea box-sizing height */
       }
 
       .chatbot-input button:hover:not(:disabled) {
@@ -171,24 +161,31 @@
         border-color: #86C490;
         box-shadow: 0 0 0 2px rgba(134, 196, 144, 0.3);
       }
-       /* --- End of Chatbot Component CSS --- */
+       /* --- End of Your Original CSS --- */
     </style>
 
-    <!-- 2. Script Libraries -->
+    <!-- 2. Add script tags for React, ReactDOM, and UUID -->
+    <!--    Using versions from your screenshot -->
     <script src="https://unpkg.com/react@17/umd/react.development.js" crossorigin></script>
     <script src="https://unpkg.com/react-dom@17/umd/react-dom.development.js" crossorigin></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/uuid/8.3.2/uuid.min.js"></script>
+
+    <!-- 3. Add Babel Standalone for JSX transformation -->
     <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
 
 </head>
 <body>
 
-    <!-- 3. Root Element for React -->
+    <!-- 4. Paste your HTML content here -->
     <div id="root"></div>
 
-    <!-- 4. Updated React JS Code -->
+    <!-- 5. Paste your JavaScript code inside this script tag -->
+    <!--    IMPORTANT: Change the type to "text/babel" -->
     <script type="text/babel">
-      const { v4: uuidv4 } = uuid; // uuid is global via CDN script
+      // Assuming the UUID library is loaded and accessible via a global 'uuid' object
+      // Make sure you have added the UUID library CDN in CodePen's JS Settings
+      // Example CDN: https://cdnjs.cloudflare.com/ajax/libs/uuid/8.3.2/uuid.min.js
+      const { v4: uuidv4 } = uuid; // Use object destructuring if uuid is an object
 
       const ChatBotUI = () => {
         // State for messages and user input
@@ -196,50 +193,51 @@
           {
             sender: 'bot',
             text: "Hi, I'm Theus!", // Initial greeting
-            id: 'initial-greeting'
+            id: 'initial-greeting' // Added an ID for consistency
           }
         ]);
         const [input, setInput] = React.useState('');
+        // State to track loading status
         const [isLoading, setIsLoading] = React.useState(false);
 
+        // Ref to store the session ID
         const sessionIdRef = React.useRef(null);
+        // Ref for the messages container to enable scrolling
         const messagesEndRef = React.useRef(null);
+        // *** ADDED: Ref for the textarea to manage focus ***
         const textareaRef = React.useRef(null);
 
-        // Generate Session ID
+        // Generate the session ID only once
         React.useEffect(() => {
           if (!sessionIdRef.current) {
             sessionIdRef.current = uuidv4();
             console.log("Generated Session ID:", sessionIdRef.current);
           }
+          // Optional: Focus the textarea on initial load
+          // textareaRef.current?.focus();
         }, []);
 
-        // Scroll to bottom on new message/loading change
+        // Effect to scroll to the bottom whenever messages or loading state change
         React.useEffect(() => {
           if (messagesEndRef.current) {
             messagesEndRef.current.scrollTop = messagesEndRef.current.scrollHeight;
           }
         }, [messages, isLoading]);
 
-        // Auto-resize textarea
-         React.useEffect(() => {
-            if (textareaRef.current) {
-                textareaRef.current.style.height = 'auto'; // Reset height
-                textareaRef.current.style.height = textareaRef.current.scrollHeight + 'px';
-            }
-         }, [input]);
-
-        // Handle Sending Message
+        // Function to handle sending messages
         const handleSend = async () => {
           const userInput = input.trim();
           if (!userInput || isLoading) return;
 
-          const newUserMessage = { sender: 'user', text: userInput, id: uuidv4() };
+          const newUserMessage = { sender: 'user', text: userInput, id: Date.now() };
           setMessages(prev => [...prev, newUserMessage]);
 
-          setInput('');
+          setInput(''); // Clear input
+          // *** ADDED: Set focus back to the textarea ***
+          // Use optional chaining ?. in case the ref isn't ready immediately
           textareaRef.current?.focus();
-          setIsLoading(true);
+
+          setIsLoading(true); // Start loading
 
           const gatewayUrl = 'https://theusv3-gateway-740868556894.us-central1.run.app';
 
@@ -253,26 +251,22 @@
               }),
             });
 
+            setIsLoading(false);
+
             if (!response.ok) {
-              const errorText = await response.text().catch(() => `Status: ${response.status}`);
-              console.error('Gateway error response:', response.status, response.statusText, errorText);
-              setIsLoading(false);
+              const errorData = await response.json().catch(() => ({ error: 'Failed to parse error response from server' }));
+              console.error('Gateway error response:', response.status, response.statusText, errorData);
+              // Refocus even if there's an error before showing message
               textareaRef.current?.focus();
-              setMessages(prev => [
-                  ...prev,
-                  { sender: 'bot', text: \`Sorry, network error (\${response.status}). Please try again.\`, id: uuidv4() }
-              ]);
-              return; // Don't proceed after error
+              throw new Error(`Network response was not ok: ${response.statusText}`);
             }
 
-            // Response OK
             const data = await response.json();
-            setIsLoading(false); // Stop loading after getting data
 
             if (data.reply) {
               // Simulated Streaming Logic
               const fullReply = data.reply;
-              const messageId = uuidv4(); // Use UUID for bot message key
+              const messageId = Date.now() + 1;
 
               setMessages(prev => [
                 ...prev,
@@ -281,7 +275,7 @@
 
               let currentText = '';
               let charIndex = 0;
-              const typingSpeed = 40; // ms per character
+              const typingSpeed = 40;
 
               const intervalId = setInterval(() => {
                 if (charIndex < fullReply.length) {
@@ -294,31 +288,33 @@
                   charIndex++;
                 } else {
                   clearInterval(intervalId);
-                  textareaRef.current?.focus();
+                  // Refocus after streaming is complete
+                   textareaRef.current?.focus();
                 }
               }, typingSpeed);
+              // End of Simulated Streaming Logic
 
             } else {
               console.error('No reply found in gateway response:', data);
               setMessages(prev => [
                 ...prev,
-                { sender: 'bot', text: "Sorry, I received a response but couldn't find a reply.", id: uuidv4() }
+                { sender: 'bot', text: "Sorry, I received a response but couldn't find a reply.", id: Date.now() + 1 }
               ]);
-               textareaRef.current?.focus();
+               textareaRef.current?.focus(); // Refocus after handling no reply
             }
 
           } catch (error) {
-            console.error('Error sending message to gateway (fetch or json parse failed):', error);
-            setIsLoading(false);
+            console.error('Error sending message to gateway:', error);
+            setIsLoading(false); // Ensure loading stops
             setMessages(prev => [
               ...prev,
-              { sender: 'bot', text: "Sorry, I'm having trouble connecting. Please try again.", id: uuidv4() }
+              { sender: 'bot', text: "Sorry, I'm having trouble connecting. Please try again later.", id: Date.now() + 1 }
             ]);
-             textareaRef.current?.focus();
+             textareaRef.current?.focus(); // Refocus after handling catch block error
           }
-        }; // End handleSend
+        };
 
-        // Handle Enter Key
+        // Function to handle key presses in the textarea
         const handleKeyDown = (e) => {
           if (e.key === 'Enter' && !e.shiftKey) {
             e.preventDefault();
@@ -326,18 +322,22 @@
           }
         };
 
-        // Render UI
+
+        // Render the Chatbot UI
         return (
           <div className="chatbot-container">
+            {/* Header Section */}
             <div className="chatbot-header">
               <img
-                src="https://assets.codepen.io/14271633/aigora_no_bg.png?format=auto" /* Keep CodePen URL for now */
+                src="https://assets.codepen.io/14271633/aigora_no_bg.png?format=auto"
                 alt="Aigora Logo"
               />
             </div>
+
+            {/* Messages Area */}
             <div className="chatbot-messages" ref={messagesEndRef}>
               {messages.map((msg) => (
-                <div key={msg.id} className={\`chatbot-message \${msg.sender}\`}>
+                <div key={msg.id || Math.random()} className={`chatbot-message ${msg.sender}`}>
                   <span style={{ whiteSpace: 'pre-wrap' }}>{msg.text}</span>
                 </div>
               ))}
@@ -347,7 +347,10 @@
                 </div>
               )}
             </div>
+
+            {/* Input Section */}
             <div className="chatbot-input">
+              {/* *** ADDED: ref attribute to textarea *** */}
               <textarea
                 ref={textareaRef}
                 value={input}
@@ -357,16 +360,15 @@
                 disabled={isLoading}
                 rows="1"
               />
-              {/* Disable button if loading or input is just whitespace */}
-              <button onClick={handleSend} disabled={isLoading || !input.trim()}>
+              <button onClick={handleSend} disabled={isLoading}>
                 Send
               </button>
             </div>
           </div>
         );
-      }; // End ChatBotUI Component
+      };
 
-      // Render to the #root div in this document
+      // Render the component to the DOM
       ReactDOM.render(<ChatBotUI />, document.getElementById('root'));
 
     </script>
