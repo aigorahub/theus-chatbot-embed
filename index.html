@@ -5,7 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>React Chatbot</title>
 
-    <!-- 1. Paste your CSS code between the <style> tags -->
     <style>
       /* Import Google Fonts - Add this at the VERY TOP */
       @import url('https://fonts.googleapis.com/css2?family=Cormorant+SC:wght@700&family=Roboto:wght@400;700&display=swap');
@@ -16,42 +15,48 @@
         margin: 0;
         padding: 0;
         /* Optional: Add background/centering if needed for standalone testing */
+        /* Set a background here or on the parent page where you embed the chatbot */
          display: flex; /* Center the chatbot for testing */
          justify-content: center;
          align-items: center;
-         background-color: #eaeaea; /* Use background from your CSS */
+         /* Example background: A gradient to show transparency */
+         background: linear-gradient(to bottom right, #7abcff, #ff7abc);
          font-family: 'Roboto', sans-serif; /* Apply default font */
          font-size: 16px; /* Apply default font size */
       }
       /* Ensure root takes available space if needed */
       #root {
-         /* Let the React component define its own size via .chatbot-container */
-         /* No specific width/height needed here if the component handles it */
+        /* Let the React component define its own size via .chatbot-container */
       }
 
-      /* --- Your Original CSS --- */
+      /* --- CSS --- */
       .chatbot-container {
         width: 360px;
         max-height: calc(100vh - 40px); /* Adjust based on body centering */
         min-height: 300px;
         display: flex;
         flex-direction: column;
-        background-color: #F3F3F3; /* Cream container background */
+        /* --- ONLY CHANGE MADE: Background to transparent --- */
+        background-color: transparent; /* Was originally #F3F3F3 */
+        /* --- END CHANGE --- */
         border-radius: 12px;
-        overflow: hidden;
-        box-shadow: 0 4px 12px rgba(65, 65, 65, 0.2);
-        border: 1px solid #414141; /* Dark grey outer border */
+        overflow: hidden; /* Keeps contents clipped by border-radius */
+
+        /* --- Restored Original Shadow and Border --- */
+        box-shadow: 0 4px 12px rgba(65, 65, 65, 0.2); /* Original shadow */
+        border: 1px solid #414141; /* Original Dark grey outer border */
+        /* --- End Restoration --- */
       }
 
       .chatbot-header {
-        background-color: #FFFFFF;
+        background-color: #FFFFFF; /* Header keeps its own background */
         color: #414141;
         padding: 10px 16px;
         display: flex;
         align-items: center;
         justify-content: flex-end;
         flex-shrink: 0;
-        border-bottom: 1px solid #414141; /* CHANGED: Dark grey bottom border */
+        border-bottom: 1px solid #414141; /* Original Dark grey bottom border */
       }
 
       .chatbot-header img {
@@ -102,7 +107,7 @@
       .chatbot-input {
         display: flex;
         padding: 10px;
-        border-top: 1px solid #414141; /* CHANGED: Dark grey top border */
+        border-top: 1px solid #414141; /* Original Dark grey top border */
         background-color: #f9f9f9; /* Light grey input area background */
         flex-shrink: 0;
       }
@@ -161,122 +166,75 @@
         border-color: #86C490;
         box-shadow: 0 0 0 2px rgba(134, 196, 144, 0.3);
       }
-       /* --- End of Your Original CSS --- */
+       /* --- End of CSS --- */
     </style>
 
-    <!-- 2. Add script tags for React, ReactDOM, and UUID -->
-    <!--    Using versions from your screenshot -->
     <script src="https://unpkg.com/react@17/umd/react.development.js" crossorigin></script>
     <script src="https://unpkg.com/react-dom@17/umd/react-dom.development.js" crossorigin></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/uuid/8.3.2/uuid.min.js"></script>
-
-    <!-- 3. Add Babel Standalone for JSX transformation -->
     <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
 
 </head>
 <body>
-
-    <!-- 4. Paste your HTML content here -->
     <div id="root"></div>
 
-    <!-- 5. Paste your JavaScript code inside this script tag -->
-    <!--    IMPORTANT: Change the type to "text/babel" -->
     <script type="text/babel">
-      // Assuming the UUID library is loaded and accessible via a global 'uuid' object
-      // Make sure you have added the UUID library CDN in CodePen's JS Settings
-      // Example CDN: https://cdnjs.cloudflare.com/ajax/libs/uuid/8.3.2/uuid.min.js
-      const { v4: uuidv4 } = uuid; // Use object destructuring if uuid is an object
+      const { v4: uuidv4 } = uuid;
 
       const ChatBotUI = () => {
-        // State for messages and user input
         const [messages, setMessages] = React.useState([
-          {
-            sender: 'bot',
-            text: "Hi, I'm Theus!", // Initial greeting
-            id: 'initial-greeting' // Added an ID for consistency
-          }
+          { sender: 'bot', text: "Hi, I'm Theus!", id: 'initial-greeting' }
         ]);
         const [input, setInput] = React.useState('');
-        // State to track loading status
         const [isLoading, setIsLoading] = React.useState(false);
-
-        // Ref to store the session ID
         const sessionIdRef = React.useRef(null);
-        // Ref for the messages container to enable scrolling
         const messagesEndRef = React.useRef(null);
-        // *** ADDED: Ref for the textarea to manage focus ***
         const textareaRef = React.useRef(null);
 
-        // Generate the session ID only once
         React.useEffect(() => {
           if (!sessionIdRef.current) {
             sessionIdRef.current = uuidv4();
             console.log("Generated Session ID:", sessionIdRef.current);
           }
-          // Optional: Focus the textarea on initial load
-          // textareaRef.current?.focus();
         }, []);
 
-        // Effect to scroll to the bottom whenever messages or loading state change
         React.useEffect(() => {
           if (messagesEndRef.current) {
             messagesEndRef.current.scrollTop = messagesEndRef.current.scrollHeight;
           }
         }, [messages, isLoading]);
 
-        // Function to handle sending messages
         const handleSend = async () => {
           const userInput = input.trim();
           if (!userInput || isLoading) return;
-
           const newUserMessage = { sender: 'user', text: userInput, id: Date.now() };
           setMessages(prev => [...prev, newUserMessage]);
-
-          setInput(''); // Clear input
-          // *** ADDED: Set focus back to the textarea ***
-          // Use optional chaining ?. in case the ref isn't ready immediately
+          setInput('');
           textareaRef.current?.focus();
-
-          setIsLoading(true); // Start loading
-
+          setIsLoading(true);
           const gatewayUrl = 'https://theusv3-gateway-740868556894.us-central1.run.app';
 
           try {
             const response = await fetch(gatewayUrl, {
               method: 'POST',
               headers: { 'Content-Type': 'application/json' },
-              body: JSON.stringify({
-                  message: userInput,
-                  sessionId: sessionIdRef.current
-              }),
+              body: JSON.stringify({ message: userInput, sessionId: sessionIdRef.current }),
             });
-
             setIsLoading(false);
-
             if (!response.ok) {
-              const errorData = await response.json().catch(() => ({ error: 'Failed to parse error response from server' }));
-              console.error('Gateway error response:', response.status, response.statusText, errorData);
-              // Refocus even if there's an error before showing message
+              const errorData = await response.json().catch(() => ({ error: 'Failed to parse error response' }));
+              console.error('Gateway error:', response.status, response.statusText, errorData);
               textareaRef.current?.focus();
-              throw new Error(`Network response was not ok: ${response.statusText}`);
+              throw new Error(`Network error: ${response.statusText}`);
             }
-
             const data = await response.json();
-
             if (data.reply) {
-              // Simulated Streaming Logic
               const fullReply = data.reply;
               const messageId = Date.now() + 1;
-
-              setMessages(prev => [
-                ...prev,
-                { sender: 'bot', text: '', id: messageId }
-              ]);
-
+              setMessages(prev => [...prev, { sender: 'bot', text: '', id: messageId }]);
               let currentText = '';
               let charIndex = 0;
               const typingSpeed = 40;
-
               const intervalId = setInterval(() => {
                 if (charIndex < fullReply.length) {
                   currentText += fullReply[charIndex];
@@ -288,33 +246,22 @@
                   charIndex++;
                 } else {
                   clearInterval(intervalId);
-                  // Refocus after streaming is complete
                    textareaRef.current?.focus();
                 }
               }, typingSpeed);
-              // End of Simulated Streaming Logic
-
             } else {
-              console.error('No reply found in gateway response:', data);
-              setMessages(prev => [
-                ...prev,
-                { sender: 'bot', text: "Sorry, I received a response but couldn't find a reply.", id: Date.now() + 1 }
-              ]);
-               textareaRef.current?.focus(); // Refocus after handling no reply
+              console.error('No reply in response:', data);
+              setMessages(prev => [...prev, { sender: 'bot', text: "Sorry, no reply found.", id: Date.now() + 1 }]);
+               textareaRef.current?.focus();
             }
-
           } catch (error) {
-            console.error('Error sending message to gateway:', error);
-            setIsLoading(false); // Ensure loading stops
-            setMessages(prev => [
-              ...prev,
-              { sender: 'bot', text: "Sorry, I'm having trouble connecting. Please try again later.", id: Date.now() + 1 }
-            ]);
-             textareaRef.current?.focus(); // Refocus after handling catch block error
+            console.error('Error sending message:', error);
+            setIsLoading(false);
+            setMessages(prev => [...prev, { sender: 'bot', text: "Connection error. Please try again.", id: Date.now() + 1 }]);
+             textareaRef.current?.focus();
           }
         };
 
-        // Function to handle key presses in the textarea
         const handleKeyDown = (e) => {
           if (e.key === 'Enter' && !e.shiftKey) {
             e.preventDefault();
@@ -322,35 +269,20 @@
           }
         };
 
-
-        // Render the Chatbot UI
         return (
           <div className="chatbot-container">
-            {/* Header Section */}
             <div className="chatbot-header">
-              <img
-                src="https://assets.codepen.io/14271633/aigora_no_bg.png?format=auto"
-                alt="Aigora Logo"
-              />
+              <img src="https://assets.codepen.io/14271633/aigora_no_bg.png?format=auto" alt="Aigora Logo" />
             </div>
-
-            {/* Messages Area */}
             <div className="chatbot-messages" ref={messagesEndRef}>
               {messages.map((msg) => (
                 <div key={msg.id || Math.random()} className={`chatbot-message ${msg.sender}`}>
                   <span style={{ whiteSpace: 'pre-wrap' }}>{msg.text}</span>
                 </div>
               ))}
-              {isLoading && (
-                <div className="chatbot-message bot typing-indicator">
-                  Theus is thinking...
-                </div>
-              )}
+              {isLoading && ( <div className="chatbot-message bot typing-indicator"> Theus is thinking... </div> )}
             </div>
-
-            {/* Input Section */}
             <div className="chatbot-input">
-              {/* *** ADDED: ref attribute to textarea *** */}
               <textarea
                 ref={textareaRef}
                 value={input}
@@ -360,17 +292,13 @@
                 disabled={isLoading}
                 rows="1"
               />
-              <button onClick={handleSend} disabled={isLoading}>
-                Send
-              </button>
+              {/* Adjusted disabled condition for button */}
+              <button onClick={handleSend} disabled={!input.trim() || isLoading}> Send </button>
             </div>
           </div>
         );
       };
-
-      // Render the component to the DOM
       ReactDOM.render(<ChatBotUI />, document.getElementById('root'));
-
     </script>
 
 </body>
