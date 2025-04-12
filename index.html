@@ -212,13 +212,17 @@
           setInput('');
           textareaRef.current?.focus();
           setIsLoading(true);
-          const gatewayUrl = 'https://theusv3-gateway-740868556894.us-central1.run.app';
+          const gatewayUrl = 'https://theusv3-gateway-740868556894.us-central1.run.app/chat';
 
           try {
             const response = await fetch(gatewayUrl, {
               method: 'POST',
               headers: { 'Content-Type': 'application/json' },
-              body: JSON.stringify({ message: userInput, sessionId: sessionIdRef.current }),
+              body: JSON.stringify({
+                message: userInput,
+                sessionId: sessionIdRef.current,
+                chatbot_id: "client-discovery-bot"
+              }),
             });
             setIsLoading(false);
             if (!response.ok) {
@@ -234,7 +238,7 @@
               setMessages(prev => [...prev, { sender: 'bot', text: '', id: messageId }]);
               let currentText = '';
               let charIndex = 0;
-              const typingSpeed = 40;
+              const typingSpeed = 20;
               const intervalId = setInterval(() => {
                 if (charIndex < fullReply.length) {
                   currentText += fullReply[charIndex];
@@ -292,7 +296,6 @@
                 disabled={isLoading}
                 rows="1"
               />
-              {/* Adjusted disabled condition for button */}
               <button onClick={handleSend} disabled={!input.trim() || isLoading}> Send </button>
             </div>
           </div>
